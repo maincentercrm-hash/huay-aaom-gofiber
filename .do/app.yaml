@@ -1,0 +1,40 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+envs:
+- key: MONGODB_URI
+  scope: RUN_AND_BUILD_TIME
+  value: mongodb+srv://maincentercrm:P0eERoZAyJHi7Np0@l0.uk8u9.mongodb.net/?retryWrites=true&w=majority&appName=l0
+- key: DB_NAME
+  scope: RUN_AND_BUILD_TIME
+  value: lotto
+- key: PORT
+  scope: RUN_AND_BUILD_TIME
+  value: "8080"
+- key: BASE_URL
+  scope: RUN_AND_BUILD_TIME
+  value: https://api-rlte-s84aj.ondigitalocean.app
+features:
+- buildpack-stack=ubuntu-22
+ingress:
+  rules:
+  - component:
+      name: api-rlte
+    match:
+      path:
+        prefix: /
+name: api-rlte
+region: sgp
+services:
+- build_command: go build -o bin/go-server .
+  environment_slug: go
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: maincentercrm-hash/huay-aaom-gofiber
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: apps-s-1vcpu-1gb
+  name: api-rlte
+  run_command: bin/go-server
+  source_dir: /
